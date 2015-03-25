@@ -181,10 +181,21 @@ static int parse_url(const char* url, char** hostport, const char** path,
   const char* hp_start, * hp_end;
   char* scope_id;
   /* check and skip scheme */
-  if (strncmp(url, "http://", 7) != 0) {
+  // if (strncmp(url, "http://", 7) != 0) {
+  //   return 0;
+  // }
+  // hp_start = url + 7;
+  if (!(strncmp(url, "http://", 7) == 0 || strncmp(url, "https://", 8) == 0)) {
     return 0;
   }
-  hp_start = url + 7;
+  hp_start = 0;
+  if (strncmp(url, "http://", 7) == 0) {
+    hp_start = url + 7;
+  } else if (strncmp(url, "https://", 8) == 0) {
+    hp_start = url + 8;
+  } else {
+    return 0;
+  }
   /* locate the end of hostport */
   if ((hp_end = strchr(hp_start, '/')) != NULL) {
     *path = hp_end;
